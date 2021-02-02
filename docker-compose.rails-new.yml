@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  # Check what is the latest Ruby version available on docker https://hub.docker.com/_/ruby
+  # And check what is the latest Rails available https://github.com/rails/rails
+  # docker-compose -f docker-compose.rails-new.yml up --build rails-new
+  rails-new:
+    image: ruby:3.0.0-alpine
+    volumes:
+      - .:/home/app
+    command: >
+      sh -c "
+        apk add --no-cache build-base postgresql-dev curl nodejs yarn tzdata;
+        gem install rails -v '~> 6.1.1';
+        cd /home/app;
+        mv README.md README.bkp;
+        # Dont use --skip-javascript, it fails heroku's default build
+        # Dont use --skip-bundle, so Gemfile.lock gets properly generated
+        rails new . --database=postgresql --webpack=react;
+        mv README.bkp README.md;
+        # Create gitignore and dockerignore
+        curl https://www.toptal.com/developers/gitignore/api/rails,windows,linux,macos > .gitignore;
+        cp .gitignore .dockerignore;
+        echo docker-compose.yml >> .dockerignore;
+        echo Dockerfile >> .dockerignore;
+        # Configure database.yml to connect to Postgres running from Docker Compose
+        sed -i 's/#host: localhost/host: db/g' config/database.yml
+        sed -i 's/#password:/password: postgres/g' config/database.yml
+        sed -i 's/#username: app/username: postgres/g' config/database.yml
+      "
