@@ -6,11 +6,25 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+    <header class="container mt-5">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="mb-0">Library</h1>
+        </div>
+      </div>
+    </header>
+
+    <main class="container my-3">
+      <div class="card">
+        <div class="card-body">
+          <%= yield %>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
