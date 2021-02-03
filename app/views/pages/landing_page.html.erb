@@ -5,3 +5,7 @@
 <div>
   Items: <%= Item.all.count %>
 </div>
+
+<div>
+  <%= react_component("HelloWorld", { greeting: "Hello from react-rails." }, prerender: true) %>
+</div>
